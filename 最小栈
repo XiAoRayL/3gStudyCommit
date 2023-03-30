@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+typedef struct node {
+	int data;
+	struct node* next;
+	struct node* before;
+}NODE;
+int _min = 99999999;
+NODE* head = nullptr;
+NODE* tail = nullptr;
+void _push_(int data)
+{
+	NODE* _temp = new NODE();
+	if (_temp == NULL)
+	{
+		cout << "no enough memory...\n";
+		system("pause");
+		exit(0);
+	}
+	//更新最小值
+	_min = (data < _min) ? data : _min;
+	_temp->next = NULL;
+	_temp->data = data;
+	if (head == NULL)
+	{
+		head = _temp;
+		tail = head;
+		head->before = NULL;
+		return;
+	}
+	tail->next = _temp;
+	_temp->before = tail;
+	//更新尾节点
+	tail = _temp;
+	return;
+}
+void _pop_()
+{
+	NODE* _temp = tail;
+	tail = tail->before;
+	tail->next = NULL;
+	delete _temp;
+	return;
+}
+//void _show_()
+//{
+//	NODE* p = head;
+//	while (p != NULL)
+//	{
+//		cout << p->data << ' ';
+//		p = p->next;
+//	}
+//	putchar('\n');
+//	return;
+//}
+inline int _top_()			 { return tail->data; }
+inline int _getMin_()		 { return _min; }
+int main()
+{
+	//入栈
+	for (int i = 0; i <= 10;++i)
+		_push_(i);
+	//出栈
+	_pop_();
+	//打印栈内最小值
+	cout << _getMin_() << '\n';
+	//返回栈顶元素
+	cout << _top_() << '\n';
+	system("pause");
+	return 0;
+}
