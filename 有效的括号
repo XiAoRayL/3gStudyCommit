@@ -1,0 +1,47 @@
+#include<iostream>
+#include<string>
+using namespace std;
+#define X "()"
+#define Z "[]"
+#define D "{}"
+string arr;
+int sizel;
+void findstr()
+{
+    string temp = arr.substr(0, 2);
+    if (sizel == 1)
+        cout << "false";
+    if (sizel == 2)
+        if (temp == X || temp == Z || temp == D)
+            cout << "true";
+        else
+            cout << "false";
+    if (sizel == 1 || sizel == 2)
+    {
+        system("pause");
+        exit(0);
+    }
+    int pos = -1;
+    pos = arr.find(X, 0);
+    if (pos == -1)
+        pos = arr.find(Z, 0);
+    if (pos == -1)
+        pos = arr.find(D, 0);
+    if (pos == -1)
+    {
+        cout << "false" << endl;
+        system("pause");
+        exit(0);
+    }
+    for (int j = pos; j < sizel - 2; ++j)
+        arr[j] = arr[j + 2];
+    sizel -= 2;
+    return;
+}
+int main()
+{
+    cin >> arr;
+    sizel = arr.size();
+    for (;;)
+        findstr();
+}
