@@ -1,0 +1,124 @@
+//岛屿数量
+class Solution {
+    public int numIslands(char[][]grid) {
+        int m=grid.length;
+        int n=grid[0].length;
+        int ans=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]=='1'){
+                    ans++;
+                    dfs(grid,i,j);
+                }
+            }
+        }
+        return ans;
+
+    }
+    public void dfs(char[][]grid, int i, int j) {
+        if(i<0 || i>=grid.length || j<0 || j>=grid[0].length){
+            return;
+        }
+        if(grid[i][j]!='1'){
+            return;
+        }
+        grid[i][j]='3';
+        dfs(grid,i-1,j);
+        dfs(grid,i+1,j);
+        dfs(grid,i,j-1);
+        dfs(grid,i,j+1);
+    }
+}
+//有效的括号
+bool isValid(char * s){
+    int n = strlen(s);
+    if(n % 2 == 1)
+    {
+        return false;                                    
+    }
+    char str[n];
+    int top = 0;
+    for(int i=0 ;i < n ; i++)
+    {
+        char ch = s[i];
+        if(ch)
+        {
+            if(ch == '{')
+            {
+                str[top++] = '}';                        
+            }
+            else if(ch == '[')
+            {
+                str[top++] = ']';                        
+            }
+            else if(ch =='(')
+            {
+                str[top++] = ')';                        
+            }
+            else
+            {
+                if(top == 0 || str[--top] != ch)         
+                {
+                    return false;
+                }
+            }
+        }
+    }
+    if(top == 0)
+    {
+        return true;
+    }  
+    return false;
+}
+//最小栈
+typedef struct Stack
+{
+    int data;
+    int min;
+    struct Stack* next;
+
+} MinStack;
+MinStack* minStackCreate()
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    p->next = NULL;
+    return p;
+}
+
+void minStackPush(MinStack* obj, int val)
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    p->data = val;
+    if(obj->next==NULL)p->min=p->data;
+    else p->min=fmin(obj->next->min,p->data);
+    p->next = obj->next;
+    obj->next = p;
+}
+
+void minStackPop(MinStack* obj)
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    p = obj->next;
+    obj->next = p->next;
+}
+
+int minStackTop(MinStack* obj)
+{
+    return obj->next->data;
+}
+
+int minStackGetMin(MinStack* obj)
+{
+    return obj->next->min;
+}
+
+void minStackFree(MinStack* obj)
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    while(obj->next!=NULL)
+    {
+        p = obj->next;
+        obj->next=p->next;
+        free(p);
+    }
+}
