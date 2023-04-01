@@ -1,0 +1,48 @@
+#include <stdio.h>
+int e[305][305];
+int book[305][305];
+
+int next[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+int n, m, k;
+
+void dfs(int x, int y) {
+	book[x][y] = 1;
+	int tx, ty;
+	for (k = 0; k <= 3; k++) {
+		tx = x + next[k][0];
+		ty = y + next[k][1];
+		if (tx < 1 || tx > n || ty < 1 || ty > m)
+			continue;
+		//如果在界内
+		if (tx >= 1 && tx <= n && ty >= 1 && ty <= m) {
+			if (book[tx][ty] == 0 && e[tx][ty] == 1) {
+				book[tx][ty] = 1;
+				dfs(tx, ty);
+			}
+		}
+	}
+	return;
+}
+int main() {
+	int i, j, ans = 0;
+	scanf("%d %d", &n, &m);
+	for (i = 1; i <= n; i++)
+		for (j = 1; j <= m; j++)
+			scanf("%d", &e[i][j]);
+	for (i = 1; i <= n; i++) {
+		for (j = 1; j <= n; j++) {
+			//如果这个点没走过&&这个点是海洋
+			if (book[i][j] == 0 && e[i][j] == 0)
+				book[i][j] = 1;
+			if (book[i][j] == 1)
+				continue;
+			//如果这个点没走过&&这个点是陆地
+			if (book[i][j] == 0 && e[i][j] == 1) {
+				ans++;
+				dfs(i, j);//将这片大路全部遍历并标记
+			}
+		}
+	}
+	printf("%d", ans);
+	return 0;
+}
