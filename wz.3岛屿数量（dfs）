@@ -17,7 +17,7 @@ void dfs(int x, int y) {
 		if (tx >= 1 && tx <= n && ty >= 1 && ty <= m) {
 			if (book[tx][ty] == 0 && e[tx][ty] == 1) {
 				book[tx][ty] = 1;
-				dfs(tx, ty);
+				dfs(tx, ty);//在这不需要回溯，因为在main()中我们已经做到了遍历每一个点
 			}
 		}
 	}
