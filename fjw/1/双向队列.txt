@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+typedef struct Node{
+	int data;
+	struct Node* prev;
+	struct Node* next;
+}node,*pnode; 
+typedef struct pNode{
+	pnode front;
+	pnode rear;
+}dueue;
+void initdueue(dueue* p){//链表初始化 
+	p->front = NULL;
+	p->rear = NULL;
+}
+int is_empty(dueue* p){//判断链表是否为空 
+	return p->front==NULL&&p->rear==NULL;
+}
+void addhead(dueue* p,int data){//在队列头部插入元素
+    pnode pnew = (pnode)malloc(sizeof(node)); 
+    pnew->data = data;
+    pnew->next = NULL;
+    pnew->prev = NULL;
+    if(is_empty(p)){
+    	p->rear = pnew;
+    	p->front = pnew;
+	}else{
+	pnew->next = p->front; 
+    p->front->prev = pnew;
+    p->front = pnew;
+    }
+}
+void addtail(dueue* p,int data){//给队列尾部插入元素
+    pnode pnew = (pnode)malloc(sizeof(node));
+	pnew->data = data;
+	pnew->next = NULL;
+	pnew->prev = NULL;
+	if(is_empty(p)){
+		p->front = pnew;
+		p->rear = pnew;
+	}else{
+	pnew->prev = p->rear; 
+	p->rear->next = pnew; 
+	p->rear = pnew;
+	}
+}
+int delete_head(dueue* p){//删除头部元素
+    if(is_empty(p)){
+    	printf("队列为空\n");
+    	return -1;
+	}
+	int data = p->front->data;
+	pnode q = p->front;
+	if (p->front == p->rear) {
+        p->front = NULL;
+        p->rear = NULL;
+    } else {
+        p->front = p->front->next;
+        p->front->prev = NULL;
+    }
+
+    free(q);
+    return data;
+}
+int delete_rear(dueue* p){//在队尾删除元素
+     if(is_empty(p)){
+    	printf("队列为空\n");
+    	return -1;
+	}
+	int data = p->rear->data;
+	pnode q = p->rear;
+	if (p->front == p->rear) {
+        p->front = NULL;
+        p->rear = NULL;
+    } else {
+        p->rear = p->rear->prev;
+        p->rear->next = NULL;
+    }
+    free(q);
+    return data;
+}
+void output(dueue* p){//输出双向队列 
+	if (is_empty(p)) {
+        printf("队列为空\n");
+        return;
+    }
+
+    pnode current = p->front;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+int main(){
+	dueue* p = (dueue*)malloc(sizeof(dueue));
+	initdueue(p);
+	addhead(p,1);
+	addhead(p,2);
+	addtail(p,3);
+	addtail(p,4);
+	delete_head(p);
+	delete_rear(p);
+	output(p);
+
+}
