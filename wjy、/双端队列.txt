@@ -1,0 +1,111 @@
+#include <iostream>
+using namespace std;
+typedef struct node {
+	int data;
+	struct node* next;
+	struct node* before;
+}NODE;
+
+//<双端队列>//
+NODE* head = nullptr;
+NODE* tail = nullptr;
+
+inline int _top_() { return head->data; }
+inline int _back_() { return tail->data; }
+void _push_top_(int data)
+{
+	NODE* _temp = new NODE();
+	if (_temp == NULL)
+	{
+		cout << "no enough memory..\n";
+		system("pause");
+		exit(0);
+	}
+	_temp->before = NULL;
+	_temp->data = data;
+	if (head == NULL)
+	{
+		head = _temp;
+		head->next = NULL;
+		tail = head;
+		return;
+	}
+	//如果已经存在了一些节点，只要把新的放到第一个就行了
+	_temp->next = head;			//连接整个链表
+	head->before = _temp;		//回连
+	head = _temp;				//更新链表头
+	return;
+}
+void _push_back_(int data)
+{
+	NODE* _temp = new NODE();
+	if (_temp == NULL)
+	{
+		cout << "no enough memory..\n";
+		system("pause");
+		exit(0);
+	}
+	_temp->next = NULL;
+	_temp->data = data;
+	if (head == NULL)
+	{
+		head = _temp;
+		head->before = NULL;
+		tail = head;
+		return;
+	}
+	//以前有过节点
+	tail->next = _temp;
+	_temp->before = tail;
+	tail = _temp;
+	return;
+}
+
+void _pop_top_()
+{
+	NODE* _temp = head;
+	head = head->next;
+	head->before = NULL;
+	delete _temp;
+	return;
+}
+
+void _pop_back_()
+{
+	NODE* _temp = tail;
+	tail = tail->before;
+	tail->next = NULL;
+	delete _temp;
+	return;
+}
+
+void _show_()		//展示队列，检查错误
+{
+	NODE* p = head;
+	while (p != NULL)
+	{
+		cout << p->data << ' ';
+		p = p->next;
+	}
+	putchar('\n');
+	return;
+}
+
+int main()
+{
+	//插入元素
+	for (int i = 0; i <= 9; ++i)
+		_push_back_(i);
+	//展示队列，检查错误
+	_show_();
+	//访问队头和队尾
+	cout<<_top_()<<"    " << _back_() << '\n';
+	//删除队头
+	_pop_top_();
+	//删除队尾
+	_pop_back_();
+	//展示队列
+	_show_();
+	system("pause");
+	return 0;
+}
