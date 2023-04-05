@@ -1,0 +1,42 @@
+typedef struct node {
+	int data;
+	struct node* lptr, * rptr;
+}jchhh_;
+
+void Q(jchhh_* NODE)
+{
+	if (NODE == NULL)
+		return;
+	else {
+		prt1(NODE);
+		Q(NODE->lptr);
+		Q(NODE->rptr);
+	}
+}
+void Z(jchhh_* NODE)
+{
+	if (NODE == NULL)
+		return;
+	else {
+		Q(NODE->lptr);
+		prt1(NODE);
+		Q(NODE->rptr);
+	}
+}
+void H(jchhh_* NODE)
+{
+	if (NODE == NULL)
+		return;
+	else {
+		Q(NODE->lptr);
+		Q(NODE->rptr);
+		prt1(NODE);
+	}
+}
+
+
+void prt1(jchhh_* NODE)
+{
+	std::cout << "这个节点的数据是" << NODE->data << " 哈哈哈" << std::endl;
+	return;
+}
