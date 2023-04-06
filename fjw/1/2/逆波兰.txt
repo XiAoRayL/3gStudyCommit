@@ -1,0 +1,53 @@
+//java
+class Solution{
+    public int evalRPN(String[] tokens){
+        Stack<Integer> zhai = new Stack<>();
+        int a,b;
+        for(int count = 0;count<tokens.length;count++){
+            if("+".equals(tokens[count])){
+                a = zhai.pop();
+                b = zhai.pop();
+                zhai.push(a+b);
+            }else if("-".equals(tokens[count])) {
+                a = zhai.pop();
+                b = zhai.pop();
+                zhai.push(b - a);
+            }
+            else if("*".equals(tokens[count])){
+                a = zhai.pop();
+                b = zhai.pop();
+                zhai.push(a*b);
+            }else if("/".equals(tokens[count])){
+                a = zhai.pop();
+                b = zhai.pop();
+                zhai.push(b/a);
+            }else{
+                zhai.push(Integer.valueOf(tokens[count]));
+            }
+
+        }
+        return zhai.pop();
+    }
+}
+//C语言
+int evalRPN(char ** tokens, int tokensSize){
+    int stack[10000];
+    int top = -1;
+    for (int i = 0; i < tokensSize; i++) {
+        if ((strcmp(tokens[i], "+") == 0) || (strcmp(tokens[i], "-") == 0) || (strcmp(tokens[i], "*") == 0) || (strcmp(tokens[i], "/") == 0)) {
+            int num2 = stack[top--];
+            int num1 = stack[top--];
+            if (strcmp(tokens[i], "+") == 0)
+                stack[++top] = num1 + num2;
+            if (strcmp(tokens[i], "-") == 0)
+                stack[++top] = num1 - num2;
+            if (strcmp(tokens[i], "*") == 0)
+                stack[++top] = num1 * num2;
+            if (strcmp(tokens[i], "/") == 0)
+                stack[++top] = num1 / num2;
+        } else {
+            stack[++top] = atoi[tokens[i]];
+        }
+    }
+    return stack[top];
+}

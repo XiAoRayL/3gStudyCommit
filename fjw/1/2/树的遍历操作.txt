@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+typedef struct BinaryTreeNode{
+	struct BinaryTreeNode* left;
+	struct BinaryTreeNode* right;
+	int data;
+}BTnode,*pBTnode;
+typedef struct ListNode{
+	pBTnode node;
+	struct ListNode* next;
+}Node,*pNode;
+typedef struct Queue{
+	pNode front;
+	pNode tail;
+	
+}queue,*pqueue;
+pBTnode BuyBTNode(int x){
+	pBTnode node = (pBTnode)malloc(sizeof(BTnode));
+	if(node==NULL){
+		printf("malloc fail\n");
+		exit(-1);
+	}
+	node->data = x;
+	node->left = node->right = NULL;
+	return node; 
+} 
+pNode initlian(pBTnode node){//初始化链表节点 
+	pNode listnode = (pNode)malloc(sizeof(Node));
+	listnode->node = node;
+	listnode->next = NULL;
+	return listnode;
+}
+pqueue initqueue(){
+	pqueue q = (pqueue)malloc(sizeof(queue));
+	q->front = NULL;
+	q->tail = NULL;
+	return q;
+} 
+int is_empty(pqueue q){//判断队列是否为空
+    return q->front==NULL; 
+}
+void enqueue(pqueue q, pBTnode node) {//为队尾添加节点 
+    pNode list_node = initlian(node);
+    if (is_empty(q)) {
+        q->front = list_node;
+    } else {
+        q->tail->next = list_node;
+    }
+    q->tail = list_node;
+}
+pBTnode dequeue(pqueue q) {//从头部移除节点 
+    if (is_empty(q)) {
+        return NULL;
+    }
+    pNode list_node = q->front;
+    pBTnode node = list_node->node;
+    q->front = list_node->next;
+    free(list_node);
+    return node;
+}
+pBTnode CreastBT(){
+	pBTnode node1 = BuyBTNode(1);
+	pBTnode node2 = BuyBTNode(2);
+	pBTnode node3 = BuyBTNode(3);
+	pBTnode node4 = BuyBTNode(4);
+	pBTnode node5 = BuyBTNode(5);
+	pBTnode node6 = BuyBTNode(6);
+	node1->left = node2;
+	node1->right = node4;
+	node2->left = node3;
+	node4->left = node5;
+	node4->right = node6;
+	return node1;
+}
+void frontorder(pBTnode root){//前序遍历 
+	if(root==NULL){
+		printf("N ");
+		return;
+	}
+	printf("%d ",root->data);
+	frontorder(root->left);
+	frontorder(root->right);
+}
+void zhongorder(pBTnode root){//中序遍历 
+	if(root==NULL ){
+		printf("N ");
+		return;
+	}
+	zhongorder(root->left);
+	printf("%d ",root->data);
+	zhongorder(root->right);
+}
+void lastorder(pBTnode root){//后序遍历 
+	if(root==NULL){
+		printf("N ");
+		return;
+	}
+	lastorder(root->left);
+	lastorder(root->right);
+	printf("%d ",root->data);
+}
+void cengci(pBTnode root){//层序遍历 
+	if(root==NULL){
+		return;
+	}
+	pqueue q = initqueue();
+	enqueue(q,root);
+	while(!is_empty(q)){
+		int level_size = 0;
+		pNode curr = q->front;
+		while (!is_empty(q)) {
+            int level_size = 0;
+        	pNode curr = q->front;
+        while (curr != NULL) {
+            level_size++;
+            curr = curr->next;
+        }
+        for (int i = 0; i < level_size; i++) {
+            pBTnode node = dequeue(q);
+            printf("%d ", node->data);
+            if (node->left != NULL) {
+                enqueue(q, node->left);
+            }
+            if (node->right != NULL) {
+                enqueue(q, node->right);
+            }
+        }
+        printf("\n");
+    }
+    free(q);
+}
+	 
+	
+}
+int main(){
+	pBTnode tree = CreastBT();
+	frontorder(tree);
+	printf("\n");
+	zhongorder(tree);
+	printf("\n");
+	lastorder(tree);
+	printf("\n");
+	printf("ceng\n");
+	cengci(tree);
+}
