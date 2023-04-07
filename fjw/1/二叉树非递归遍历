@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+typedef struct tree{
+	struct tree* left;
+	struct tree* right;
+	int data;
+}pbtree,*pBtree;
+typedef struct listnode{
+	struct listnode* next;
+	pBtree node;
+}Node,*pNode;
+typedef struct stack{
+	pNode top;
+}Stack,*pStack;
+void initstack(pStack stack){//初始化栈 
+	stack->top = NULL;
+}
+int is_empty(pStack stack){//判断栈是否为空 
+	return stack->top==NULL;
+}
+void push(pStack stack,pBtree root){//入栈 
+	pNode pnew = (pNode)malloc(sizeof(Node));
+	pnew->node = root;
+	pnew->next = stack->top;
+	stack->top = pnew;
+}
+pBtree pop(pStack stack){//出栈 
+	if(is_empty(stack)){
+		return NULL;
+	}
+	pNode p = stack->top;
+	pBtree node = p->node;
+	stack->top = p->next;
+	free(p);
+	return node;
+}
+void frontbian(pBtree root){
+	if(root==NULL){
+		return;
+	}
+	Stack stack;
+	initstack(&stack);
+	push(&stack,root);
+	while(!is_empty(&stack)){
+		pBtree node = pop(&stack);
+		printf("%d ",node->data);
+		if(node->right!=NULL){
+			push(&stack,node->right);
+		}
+		if(node->left!=NULL){
+			push(&stack,node->left);
+		}
+	}
+}
+void betweenbian(pBtree root){
+	if(root==NULL){
+		return;
+	}
+	Stack stack;
+	initstack(&stack);
+	while(!is_empty(&stack)||root!=NULL){
+		if(root!=NULL){
+			push(&stack,root);
+			root = root->left;
+		}else{
+			root = pop(&stack);
+			printf("%d ",root->data);
+			root = root->right;
+		}
+	}
+}
+void lastbian(pBtree root){
+	if(root==NULL){
+		return;
+	}
+	Stack stack1;
+	Stack stack2;
+	initstack(&stack1);
+	initstack(&stack2);
+	push(&stack1,root);
+	
+	while(!is_empty(&stack1)){
+		pBtree node = pop(&stack1);
+		push(&stack2,node);
+		if(node->left!=NULL){
+			push(&stack1,node->left);
+		}
+		if(node->right!=NULL){
+			push(&stack1,node->right);
+		}
+	}
+	while(!is_empty(&stack2)){
+		pBtree node = pop(&stack2);
+		printf("%d ",node->data);
+	}
+}
+int main() {
+    // 构造二叉树
+   pBtree root = (pBtree)malloc(sizeof(pbtree));
+    root->data = 1;
+    root->left = (pBtree)malloc(sizeof(pbtree));
+    root->left->data = 2;
+    root->left->left = NULL;
+    root->left->right = NULL;
+    root->right = (pBtree)malloc(sizeof(pbtree));
+    root->right->data = 3;
+    root->right->left = NULL;
+    root->right->right = (pBtree)malloc(sizeof(pbtree));
+    root->right->right->data = 4;
+    root->right->right->left = NULL;
+    root->right->right->right = NULL;
+
+    printf("前序遍历：");
+    frontbian(root);
+    printf("\n");
+
+    printf("中序遍历：");
+    betweenbian(root);
+    printf("\n");
+
+    printf("后序遍历：");
+    lastbian(root);
+    printf("\n");
+
+    return 0;
+}
