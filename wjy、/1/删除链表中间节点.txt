@@ -1,0 +1,15 @@
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+        if(head == null||head.next == null){
+            return null;
+        }
+        ListNode p = new ListNode(-1, head);
+        ListNode q = head;
+        while(q != null&&q.next != null){
+            p = p.next;
+            q = q.next.next;
+        }
+        p.next = p.next.next;
+        return head;
+    }
+}
