@@ -1,0 +1,188 @@
+//队列
+
+#include <stdio.h>
+#include <stdlib.h>
+//定义单链表节点结构体
+typedef struct node {
+    int data;
+    struct node* next;
+} Node;
+
+//定义队列结构体
+typedef struct queue {
+    Node *front; //队头指针
+    Node *rear; //队尾指针
+} Queue;
+
+//初始化队列
+void initQueue(Queue *q) {
+    q->front = q->rear = NULL;
+}
+
+//判断队列是否为空
+int isEmpty(Queue *q) {
+    return q->front == NULL;
+}
+
+//入队操作
+void enQueue(Queue *q, int data) {
+	Node* p = (Node*)malloc(sizeof(Node));
+	p->data = data;
+	p->next = NULL;
+	if (isEmpty(q)) {
+	q->front = q->rear = p;
+	} else {
+	q->rear->next = p;
+	q->rear = p;//q->rear相当于1.0版本中pnew; 
+  }
+}
+
+//出队操作
+int deQueue(Queue *q) {
+	if (isEmpty(q)) {
+	printf("Queue is empty!\n");
+	return -1;
+   }
+	Node *p = q->front;
+	int data = p->data;
+	q->front = p->next;
+	if (q->front == NULL)
+	q->rear = NULL;
+	free(p);
+	return data;
+}
+
+//输出队列中的所有元素
+void printQueue(Queue *q) {
+	if (isEmpty(q)) {
+	printf("Queue is empty!\n");
+	return;
+  }
+	printf("Queue: ");
+	Node *p = q->front;
+	while (p != NULL) {
+	printf("%d ", p->data);
+	p = p->next;
+  }
+	printf("\n");
+}
+
+int main() {
+Queue q;
+initQueue(&q);
+enQueue(&q, 1);
+enQueue(&q, 2);
+enQueue(&q, 3);
+printQueue(&q);
+printf("Dequeue: %d\n", deQueue(&q));
+printQueue(&q);
+enQueue(&q, 4);
+printQueue(&q);
+return 0;
+}
+//栈
+#include <stdio.h> 
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+typedef struct node{
+	int data;
+	struct node *next;
+}Node,*pNode;
+typedef struct stack{
+	pNode top;
+	pNode bottom;
+}Stack,*pStack;
+void init(pStack);
+void push(pStack, int);
+void traverse(pStack); 
+bool pop(pStack,int *);
+bool empty(pStack pS);
+void clear(pStack pS); 
+int main()
+{
+	Stack S;
+	int val;
+	init(&S);//出栈 
+	push(&S,1);//压栈 
+	push(&S,2);
+//	if(pop(&S,&val))
+//	{
+//		printf("出栈成功，元素是%d\n",val);
+//	}else
+//	{
+//		printf("shiban\n");
+//	}
+//	clear(&S);
+	traverse(&S);
+//	clear(&S);
+}
+void init(pStack pS)//初始化 
+{
+	pS->top = (pNode)malloc(sizeof(Node));
+	if(pS->top==NULL)
+	{
+		printf("动态分配内存失败!\n");
+		exit(-1);
+	}else{
+		pS->bottom = pS->top;
+		pS->top->next = NULL;//pS->bottom->next=NULL
+	}
+}
+void push(pStack pS,int val)
+{
+	pNode pnew = (pNode)malloc(sizeof(Node));
+	pnew->data = val;
+	pnew->next = pS->top;
+	pS->top = pnew;
+	
+}
+void traverse(pStack pS)
+{
+	pNode p = pS->top;
+	while(p!=pS->bottom)
+	{
+		printf("%d ",p->data);
+		p = p->next;
+	}
+	printf("\n");
+}
+bool empty(pStack pS)
+{
+	if(pS->top==pS->bottom)
+	{
+		return true;
+	}else{
+		return false;
+	}
+}
+bool pop(pStack pS,int *pval)//出栈  
+{
+	if(empty(pS))
+	{
+		return false;
+	}else{
+		pNode r = pS->top;
+		*pval = r->data;
+		pS->top = r->next;//由上往下 
+		free(r);
+		r = NULL; 
+	}
+}
+void clear(pStack pS)//清空栈 
+{
+	if(empty(pS))
+	{
+		return;
+	 }else{
+	 	pNode p = pS->top;
+	 	pNode q = p->next;
+	 	while(p!=pS->bottom)
+	 	{
+	 		q = p->next;
+	 		free(p);
+	 		p = q;
+		 }
+		 pS->top = pS->bottom; 
+	 }
+}

@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+typedef struct node {
+	int data;
+	struct node* next;
+	struct node* before;
+}NODE;
+NODE* head = nullptr;
+NODE* tail = nullptr;
+void _push_(int data)
+{
+	NODE* _temp = new NODE();
+	if (_temp == NULL)
+	{
+		cout << "no enough memory...\n";
+		system("pause");
+		exit(0);
+	}
+	_temp->next = NULL;
+	_temp->data = data;
+	if (head == NULL)
+	{
+		head = _temp;
+		tail = head;
+		head->before = NULL;
+		return;
+	}
+	tail->next = _temp;
+	_temp->before = tail;
+	//更新尾节点
+	tail = _temp;
+	return;
+}
+void _pop_()
+{
+	NODE* _temp = tail;
+	tail = tail->before;
+	tail->next = NULL;
+	delete _temp;
+	return;
+}
+inline int _top_() { return tail->data; }
+int main()
+{
+	//入栈
+	for (int i = 0; i <= 10; ++i)
+		_push_(i);
+	//出栈
+	_pop_();
+	//返回栈顶元素
+	cout << _top_() << '\n';
+
+	system("pause");
+	return 0;
+}
