@@ -1,0 +1,52 @@
+//最小栈
+typedef struct Stack
+{
+    int data;
+    int min;
+    struct Stack* next;
+
+} MinStack;
+MinStack* minStackCreate()
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    p->next = NULL;
+    return p;
+}
+
+void minStackPush(MinStack* obj, int val)
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    p->data = val;
+    if(obj->next==NULL)p->min=p->data;
+    else p->min=fmin(obj->next->min,p->data);
+    p->next = obj->next;
+    obj->next = p;
+}
+
+void minStackPop(MinStack* obj)
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    p = obj->next;
+    obj->next = p->next;
+}
+
+int minStackTop(MinStack* obj)
+{
+    return obj->next->data;
+}
+
+int minStackGetMin(MinStack* obj)
+{
+    return obj->next->min;
+}
+
+void minStackFree(MinStack* obj)
+{
+    MinStack* p = (MinStack*)malloc(sizeof(MinStack));
+    while(obj->next!=NULL)
+    {
+        p = obj->next;
+        obj->next=p->next;
+        free(p);
+    }
+}
