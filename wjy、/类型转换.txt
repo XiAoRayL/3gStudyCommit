@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+	//数字转字符
+	//int a = 4;
+	//char ch = a;
+	//cout << char(a+'0') << '\n';
+
+
+	//字符转数字
+	//int x = 0;
+	//char ch = '4';
+	//int a = (x << 3) + (x << 1) + (ch ^ 48);
+	//cout << a << '\n';
+	
+	//数字转字符串
+	//int a = 0;
+	//char ch[2];
+	//sprintf(ch, "%d", a);
+	//cout << ch<<'\n';
+	
+	//字符转数字
+	char ch = '4';
+	cout << (int)ch-48;
+
+	system("pause");
+	return 0;
+
+}
