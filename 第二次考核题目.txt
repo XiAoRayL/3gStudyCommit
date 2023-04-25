@@ -1,0 +1,135 @@
+第二次考核题目.
+一、压缩守符串：不会的是原地修改字符串.
+
+
+代码：int compress(char* chars, int charsSize){
+    //左，读写，注意数据类型
+    int left=0,read=0,write=0,num;
+    for(read=0;read<charsSize;read++){
+        if(read == charsSize-1||chars[read] != chars[read+1]){
+            num = read-left+1;
+            chars[write++] = chars[read];
+            int p = write;
+            if(num != 1){
+                while(num>0){
+                    chars[write++] = num % 10 + '0';
+                    num /= 10;
+                }
+            }
+            int q = write-1;
+            char c;
+            while(p < q){
+                c = chars[p];
+                chars[p] = chars[q];
+                chars[q] = c;
+                p++;
+                q--;
+            }
+            left = read+1; 
+        }
+        
+    }
+    return write;
+}
+①.删掉重复守符
+②.将非1的计数存住并整数拆分并存入，→会需要交换位置
+标签：双指针、守符串
+
+二、盛最多水的容器：超出时闻限制
+代码：int min(int a,int b){
+    a = a > b ? b : a;
+    return a;
+}
+int max(int a,int b){
+    a = a > b ? a : b;
+    return a;
+}
+int maxArea(int* height, int heightSize){
+    int left,r;
+    int s = 0, h = 1,l=heightSize-1,ans=0;
+    for(left = 0,r = heightSize-1;left <heightSize,r > left;){
+        h = min(height[left],height[r]);
+        s = h * l;
+        ans = max(s,ans);
+        if(height[left] > height[r]){
+            r--;
+        }else{
+            left++;
+        }
+        l--;   
+
+    }
+    return ans;
+}
+①.记下宽度最大时的面积[左、右]
+②.比较两边更小的高该边改一下（左移/右移）
+标签：双指针、贪心
+三、括号嵌套深度：前提是有效括号.
+代码：#define MAX(a, b) ((a) > (b) ? (a) : (b))
+/*有效括号多个左括号，没有右括号就叠加，有右括号就就减去，在入栈一个左都和最大计数比较*/
+int maxDepth(char * s){
+    int ans = 0, size = 0;
+    int n = strlen(s);
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '(') {
+            ++size;
+            ans = MAX(ans, size);
+        } else if (s[i] == ')') {
+            --size;
+        }
+    }
+    return ans;
+}
+①在括号入柱、记录、比较深度
+②右括号出栈
+标签：栈
+四、有序数组的平方：暴力
+代码：/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* sortedSquares(int* nums, int numsSize, int* returnSize){
+    int i,j,t;
+    for(i = 0;i < numsSize;i++){
+        nums[i] *= nums[i];
+    }
+    int cnt;
+    for(i=0;i<numsSize;i++){
+        cnt = 0;
+        for(j=0;j<numsSize-1;j++){
+            if(nums[j] > nums[j+1]){
+                t = nums[j];
+                nums[j] = nums[j+1];
+                nums[j+1] = t;
+                cnt++;
+            }
+        }
+        if(!cnt){
+            break;
+        }
+    }
+    *returnSize = numsSize;
+    return nums;
+}
+①找出正教分界线、记录左、石下标
+②再开数组、利用左右指针，一一入数组
+标签：双指针、排序
+五、除链表的中间节点：暴力
+代码：ListNode* deleteMiddle(ListNode* head) {
+        if (head->next == nullptr) {
+            return nullptr;
+        }
+        
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* pre = nullptr;
+        while (fast && fast->next) {
+            fast = fast->next->next;
+            pre = slow;
+            slow = slow->next;
+        }
+        pre->next = pre->next->next;
+        return head;
+    }
+};
+①快走2.慢走1，快的结束时，慢在中间
+标签：双指针
